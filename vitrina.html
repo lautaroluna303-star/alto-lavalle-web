@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alto Lavalle Restó</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --crema: #f8f4ee;
+    --papel: #fffdfa;
+    --vino: #651c2c;
+    --vino-oscuro: #3f1119;
+    --oro: #b6842f;
+    --oro-claro: #d9b676;
+    --texto: #2c2320;
+    --texto-suave: #7a6f68;
+    --linea: #e3d9cc;
+  }
+
+  *{box-sizing:border-box;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--crema);
+    color:var(--texto);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.5;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    margin:0;
+    color:var(--vino);
+  }
+
+  /* ===== ENCABEZADO ===== */
+
+  .encabezado{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(214,182,118,0.16), transparent 55%),
+      linear-gradient(155deg, var(--vino-oscuro), var(--vino) 65%);
+    color:var(--crema);
+    padding:56px 20px 34px;
+    text-align:center;
+    animation: aparecer 0.7s ease both;
+  }
+
+  @keyframes aparecer{
+    from{opacity:0; transform:translateY(-8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .encabezado h1{
+    color:#fff;
+    font-size:clamp(2.1rem, 7vw, 2.9rem);
+    font-weight:600;
+    letter-spacing:0.3px;
+  }
+
+  .encabezado p{
+    margin-top:6px;
+    color:#dcbd8c;
+    font-size:0.95rem;
+  }
+
+  .ornamento{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+    color:#dcbd8c;
+    opacity:0.9;
+  }
+
+  .ornamento .raya{
+    width:36px;
+    height:1px;
+    background:currentColor;
+    opacity:0.6;
+  }
+
+  .ornamento svg{
+    width:14px;
+    height:14px;
+  }
+
+  /* ===== INFO RÁPIDA ===== */
+
+  .info-rapida{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    padding:22px 20px 6px;
+    max-width:680px;
+    margin:0 auto;
+  }
+
+  .info-rapida a{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:var(--papel);
+    border:1px solid var(--linea);
+    border-radius:999px;
+    padding:8px 16px;
+    font-size:0.85rem;
+    color:var(--texto);
+    text-decoration:none;
+    box-shadow:0 2px 6px rgba(101,28,44,0.06);
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+
+  .info-rapida a:hover{
+    border-color:var(--oro);
+    color:var(--vino);
+    transform:translateY(-1px);
+  }
+
+  .info-rapida svg{
+    width:15px;
+    height:15px;
+    flex-shrink:0;
+  }
+
+  /* ===== NAV DE CATEGORÍAS ===== */
+
+  .nav-categorias{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:rgba(248,244,238,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--linea);
+    padding:12px 16px;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    margin-top:18px;
+  }
+
+  .nav-categorias::-webkit-scrollbar{display:none;}
+
+  .nav-categorias a{
+    flex-shrink:0;
+    font-size:0.82rem;
+    font-weight:500;
+    color:var(--texto-suave);
+    text-decoration:none;
+    padding:6px 13px;
+    border-radius:999px;
+    border:1px solid transparent;
+    white-space:nowrap;
+  }
+
+  .nav-categorias a:hover{
+    color:var(--vino);
+    border-color:var(--linea);
+  }
+
+  /* ===== CONTENIDO ===== */
+
+  .contenedor{
+    max-width:680px;
+    margin:0 auto;
+    padding:8px 20px 60px;
+  }
+
+  .categoria{
+    margin-top:34px;
+    scroll-margin-top:64px;
+  }
+
+  .categoria-titulo{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    font-size:1.35rem;
+    font-weight:600;
+    padding-bottom:9px;
+    margin-bottom:16px;
+    border-bottom:2px solid var(--oro-claro);
+  }
+
+  .plato-fila{
+    width:100%;
+    padding:11px 0;
+    border-bottom:1px dotted var(--linea);
+  }
+
+  .plato-fila:last-child{
+    border-bottom:none;
+  }
+
+  .plato{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+
+  .plato-nombre{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.05rem;
+  }
+
+  .plato-relleno{
+    flex:1;
+    border-bottom:1px dotted var(--texto-suave);
+    opacity:0.45;
+    height:1px;
+    align-self:center;
+    min-width:16px;
+  }
+
+  .plato-precio{
+    font-weight:600;
+    color:var(--oro);
+    white-space:nowrap;
+  }
+
+  .plato-desc{
+    display:block;
+    width:100%;
+    font-size:0.85rem;
+    color:var(--texto-suave);
+    font-style:italic;
+    margin-top:3px;
+  }
+
+  .estado{
+    text-align:center;
+    padding:70px 20px;
+    color:var(--texto-suave);
+    font-size:0.95rem;
+  }
+
+  /* ===== FOOTER ===== */
+
+  footer{
+    background:var(--vino-oscuro);
+    color:#e7cfa9;
+    text-align:center;
+    padding:34px 20px 40px;
+    font-size:0.88rem;
+  }
+
+  footer .horarios{
+    white-space:pre-line;
+    margin:0 0 4px;
+  }
+
+  footer .firma{
+    margin-top:14px;
+    font-size:0.75rem;
+    color:#a9856a;
+    letter-spacing:0.3px;
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="encabezado">
+    <h1 id="nombreNegocio">Alto Lavalle Restó</h1>
+    <p id="direccionNegocio">Famaillá, Tucumán</p>
+    <div class="ornamento">
+      <span class="raya"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 2v8a4 4 0 0 0 8 0V2M12 10v12M8 2v6M16 2v6"/></svg>
+      <span class="raya"></span>
+    </div>
+  </div>
+
+  <div class="info-rapida" id="infoRapida"></div>
+
+  <nav class="nav-categorias" id="navCategorias" style="display:none;"></nav>
+
+  <div class="contenedor">
+    <div id="menu">
+      <div class="estado">Cargando el menú...</div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="horarios" id="horariosFooter"></p>
+    <p class="firma">Alto Lavalle Restó</p>
+  </footer>
+
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      onSnapshot,
+      collection
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+    // =========================
+    // FIREBASE (misma config que el panel; solo lectura)
+    // =========================
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNtM4PrMfiR_lU2ddi3gsvzJn4WfMxNKQ",
+      authDomain: "alto-lavalle.firebaseapp.com",
+      projectId: "alto-lavalle",
+      storageBucket: "alto-lavalle.firebasestorage.app",
+      messagingSenderId: "467411113937",
+      appId: "1:467411113937:web:a60916344447f66fddb2f0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+
+    const ORDEN_CATEGORIAS = [
+      "entradas", "ensaladas", "pastas", "pizzas",
+      "minutas", "guarniciones", "salsas", "kids", "otros"
+    ];
+
+    const NOMBRES_CATEGORIAS = {
+      entradas: "Entradas",
+      ensaladas: "Ensaladas",
+      pastas: "Pastas",
+      pizzas: "Pizzas",
+      minutas: "Minutas",
+      guarniciones: "Guarniciones",
+      salsas: "Salsas",
+      kids: "Kids",
+      otros: "Otros"
+    };
+
+    // Iconos propios en vez de emoji, para que quede prolijo en cualquier dispositivo
+    const ICONOS = {
+      telefono: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 1-2z"/></svg>',
+      instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none"/></svg>',
+      facebook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 8h-2a2 2 0 0 0-2 2v2H9v3h2v6h3v-6h2.2l.8-3H14v-1.5c0-.6.3-1 1-1h2V8z"/></svg>',
+      mapa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>'
+    };
+
+
+    // =========================
+    // DATOS DEL NEGOCIO (tiempo real)
+    // =========================
+
+    const refNegocio = doc(db, "config", "negocio");
+
+    onSnapshot(refNegocio, (snap) => {
+
+      if (!snap.exists()) return;
+
+      const datos = snap.data();
+
+      document.getElementById("nombreNegocio").textContent =
+        datos.nombre || "Alto Lavalle Restó";
+
+      document.getElementById("direccionNegocio").textContent =
+        datos.direccion || "";
+
+      document.getElementById("horariosFooter").textContent =
+        datos.horarios || "";
+
+      const infoRapida = document.getElementById("infoRapida");
+      infoRapida.innerHTML = "";
+
+      const agregarEnlace = (icono, texto, href) => {
+        const a = document.createElement("a");
+        a.href = href;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.innerHTML = icono + "<span>" + texto + "</span>";
+        infoRapida.appendChild(a);
+      };
+
+      if (datos.telefono) {
+        agregarEnlace(
+          ICONOS.telefono,
+          datos.telefono,
+          "https://wa.me/" + datos.telefono.replace(/\D/g, "")
+        );
+      }
+
+      if (datos.instagram) {
+        agregarEnlace(
+          ICONOS.instagram,
+          "Instagram",
+          datos.instagram.startsWith("http")
+            ? datos.instagram
+            : "https://instagram.com/" + datos.instagram.replace("@", "")
+        );
+      }
+
+      if (datos.facebook) {
+        agregarEnlace(ICONOS.facebook, "Facebook", datos.facebook);
+      }
+
+      if (datos.maps) {
+        agregarEnlace(ICONOS.mapa, "Cómo llegar", datos.maps);
+      }
+
+    }, (error) => {
+      console.error("Error escuchando datos del negocio:", error);
+    });
+
+
+    // =========================
+    // MENÚ (tiempo real)
+    // =========================
+
+    const refMenu = collection(db, "menu");
+
+    onSnapshot(refMenu, (snap) => {
+
+      const menuDiv = document.getElementById("menu");
+      const nav = document.getElementById("navCategorias");
+
+      const platosActivos = [];
+
+      snap.forEach((d) => {
+        const datos = d.data();
+        if (datos.activo === true) {
+          platosActivos.push(datos);
+        }
+      });
+
+      if (platosActivos.length === 0) {
+        menuDiv.innerHTML =
+          '<div class="estado">Todavía no hay platos cargados.</div>';
+        nav.style.display = "none";
+        nav.innerHTML = "";
+        return;
+      }
+
+      const grupos = {};
+
+      platosActivos.forEach((p) => {
+        const cat = p.categoria || "otros";
+        if (!grupos[cat]) grupos[cat] = [];
+        grupos[cat].push(p);
+      });
+
+      menuDiv.innerHTML = "";
+      nav.innerHTML = "";
+
+      const categoriasPresentes = ORDEN_CATEGORIAS.filter((c) => grupos[c]);
+
+      categoriasPresentes.forEach((cat) => {
+
+        // Nav
+        const link = document.createElement("a");
+        link.href = "#cat-" + cat;
+        link.textContent = NOMBRES_CATEGORIAS[cat] || cat;
+        nav.appendChild(link);
+
+        // Sección
+        const seccion = document.createElement("div");
+        seccion.className = "categoria";
+        seccion.id = "cat-" + cat;
+
+        const titulo = document.createElement("div");
+        titulo.className = "categoria-titulo";
+        titulo.textContent = NOMBRES_CATEGORIAS[cat] || cat;
+        seccion.appendChild(titulo);
+
+        grupos[cat].forEach((plato) => {
+
+          const fila = document.createElement("div");
+          fila.className = "plato-fila";
+
+          const linea = document.createElement("div");
+          linea.className = "plato";
+
+          const nombre = document.createElement("span");
+          nombre.className = "plato-nombre";
+          nombre.textContent = plato.nombre || "Sin nombre";
+
+          const relleno = document.createElement("span");
+          relleno.className = "plato-relleno";
+
+          const precio = document.createElement("span");
+          precio.className = "plato-precio";
+          precio.textContent =
+            (plato.precio !== null && plato.precio !== undefined)
+              ? "$" + Number(plato.precio).toLocaleString("es-AR")
+              : "Consultar";
+
+          linea.appendChild(nombre);
+          linea.appendChild(relleno);
+          linea.appendChild(precio);
+
+          fila.appendChild(linea);
+
+          if (plato.descripcion) {
+            const desc = document.createElement("span");
+            desc.className = "plato-desc";
+            desc.textContent = plato.descripcion;
+            fila.appendChild(desc);
+          }
+
+          seccion.appendChild(fila);
+
+        });
+
+        menuDiv.appendChild(seccion);
+
+      });
+
+      nav.style.display = categoriasPresentes.length > 1 ? "flex" : "none";
+
+    }, (error) => {
+      console.error("Error escuchando el menú:", error);
+      document.getElementById("menu").innerHTML =
+        '<div class="estado">No se pudo cargar el menú.</div>';
+    });
+
+  </script>
+
+</body>
+</html>
