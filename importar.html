@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Importar datos originales — Alto Lavalle</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f1ed;color:#333}
+.c{max-width:560px;margin:auto;padding:24px 20px}
+h1{color:#651c2c;font-size:1.4rem}
+.t{background:#fff;border-radius:12px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,.08);margin-bottom:16px}
+button{border:0;border-radius:8px;padding:13px 18px;font-size:15px;background:#651c2c;color:#fff;width:100%;cursor:pointer}
+button:disabled{background:#999}
+#estado{white-space:pre-line;margin-top:14px;font-size:.92rem}
+a{color:#651c2c}
+</style></head><body><div class="c">
+<h1>Importar datos originales</h1>
+<div class="t" id="sinLogin" style="display:none">
+  Primero iniciá sesión en <a href="/admin">/admin</a> con tu mail de administrador y volvé a esta página.
+</div>
+<div class="t" id="conLogin" style="display:none">
+  <p>Esto carga en tu base de Firebase:</p>
+  <ul>
+    <li>Todos los platos del menú original, con sus precios (los que ya existan con el mismo nombre no se duplican).</li>
+    <li>Dirección, teléfono, Facebook, Google Maps y horarios del sitio original.</li>
+  </ul>
+  <p>Después editás todo desde <a href="/admin">/admin</a>.</p>
+  <button id="btn">Importar ahora</button>
+  <div id="estado"></div>
+</div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, collection, addDoc, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyCNtM4PrMfiR_lU2ddi3gsvzJn4WfMxNKQ",
+  authDomain: "alto-lavalle.firebaseapp.com",
+  projectId: "alto-lavalle",
+  storageBucket: "alto-lavalle.firebasestorage.app",
+  messagingSenderId: "467411113937",
+  appId: "1:467411113937:web:a60916344447f66fddb2f0"
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const MENU = [
+  {categoria:'pastas', item:'Tallarines con salsa', descripcion:'', precio:'7500'},
+  {categoria:'pastas', item:'Tallarines veggie', descripcion:'Salsa fileto, crema y champignones', precio:'9000'},
+  {categoria:'pastas', item:'Tallarines al pesto / a la manteca', descripcion:'', precio:'8500'},
+  {categoria:'pastas', item:'Ñoquis con salsa', descripcion:'', precio:'8500'},
+  {categoria:'pastas', item:'Ravioles con salsa', descripcion:'', precio:'8500'},
+  {categoria:'pastas', item:'Sorrentinos con salsa', descripcion:'', precio:'9000'},
+
+  {categoria:'pizzas', item:'Mozzarella', descripcion:'', precio:'2500'},
+  {categoria:'pizzas', item:'Especial', descripcion:'', precio:'3000'},
+  {categoria:'pizzas', item:'Napolitana', descripcion:'', precio:'3000'},
+  {categoria:'pizzas', item:'Fugazzeta', descripcion:'', precio:'3500'},
+  {categoria:'pizzas', item:'Calabresa', descripcion:'', precio:'8500'},
+
+  {categoria:'minutas', item:'Sandwich de milanesa simple', descripcion:'', precio:'5000'},
+  {categoria:'minutas', item:'Sandwich de milanesa especial', descripcion:'', precio:'6000'},
+  {categoria:'minutas', item:'Sandwich de lomito simple', descripcion:'', precio:'5500'},
+  {categoria:'minutas', item:'Sandwich de lomito especial', descripcion:'', precio:'6500'},
+  {categoria:'minutas', item:'Hamburguesa simple', descripcion:'', precio:'4500'},
+  {categoria:'minutas', item:'Hamburguesa especial', descripcion:'', precio:'5500'},
+  {categoria:'minutas', item:'Hamburguesa Alto Lavalle', descripcion:'Doble hamburguesa, cheddar, cebolla caramelizada, lechuga, tomate y salsa barbacoa, con papas rústicas', precio:'7000'},
+  {categoria:'minutas', item:'Mexicano', descripcion:'', precio:'13000'},
+  {categoria:'minutas', item:'½ Mexicano', descripcion:'', precio:'7000'},
+
+  {categoria:'entradas', item:'Empanada de carne', descripcion:'', precio:''},
+  {categoria:'entradas', item:'Empanada de pollo', descripcion:'', precio:''},
+  {categoria:'entradas', item:'Omelette de espinacas y parmesano', descripcion:'', precio:''},
+  {categoria:'entradas', item:'Omelette suizo', descripcion:'', precio:''},
+  {categoria:'entradas', item:'Omelette de jamón y queso', descripcion:'', precio:''},
+  {categoria:'entradas', item:'Picada para 2 personas', descripcion:'', precio:''},
+
+  {categoria:'ensaladas', item:'Ensalada mixta', descripcion:'Lechuga y tomate', precio:'8500'},
+  {categoria:'ensaladas', item:'Ensalada mixta especial', descripcion:'Lechuga, tomate, cebolla, arvejas y huevo', precio:'8000'},
+  {categoria:'ensaladas', item:'Ensalada Alto Lavalle', descripcion:'Pollo, jamón, queso, lechuga, tomate, zanahoria, arvejas y huevo', precio:'9000'},
+  {categoria:'ensaladas', item:'Ensalada mediterránea', descripcion:'Lechuga, tomate, aceitunas, atún y huevo duro', precio:'9000'},
+
+  {categoria:'guarniciones', item:'Papas fritas', descripcion:'', precio:'2500'},
+  {categoria:'guarniciones', item:'Papas noisette', descripcion:'', precio:'3000'},
+  {categoria:'guarniciones', item:'Papas a la española', descripcion:'', precio:'4000'},
+  {categoria:'guarniciones', item:'Papas a la crema', descripcion:'', precio:'5500'},
+  {categoria:'guarniciones', item:'Papas gratinadas', descripcion:'', precio:'5500'},
+  {categoria:'guarniciones', item:'Puré de papas / calabaza / mixto', descripcion:'', precio:'4000'},
+  {categoria:'guarniciones', item:'Arroz amarillo', descripcion:'', precio:'3500'},
+  {categoria:'guarniciones', item:'Verduras grilladas', descripcion:'', precio:'4000'},
+
+  {categoria:'salsas', item:'Crema', descripcion:'', precio:'2000'},
+  {categoria:'salsas', item:'Fileto', descripcion:'', precio:'2500'},
+  {categoria:'salsas', item:'Blanca', descripcion:'', precio:'2000'},
+  {categoria:'salsas', item:'Roquefort', descripcion:'', precio:'3000'},
+
+  {categoria:'otros', item:'Revuelto Gramajo', descripcion:'', precio:'7500'},
+  {categoria:'otros', item:'Revuelto de papas', descripcion:'Con arvejas, jamón y queso', precio:'7500'},
+  {categoria:'otros', item:'Mixta', descripcion:'Salsa blanca y salsa fileto', precio:'7500'},
+  {categoria:'otros', item:'Cuatro quesos', descripcion:'', precio:'8000'},
+  {categoria:'otros', item:'Parissiene', descripcion:'Salsa blanca, pollo desmenuzado y jamón', precio:'8000'},
+  {categoria:'otros', item:'Porción de peceto', descripcion:'', precio:'6500'},
+  {categoria:'otros', item:'Ternera', descripcion:'', precio:'8000'},
+
+  {categoria:'kids', item:'Hamburguesa Alto Lavalle kids', descripcion:'Lechuga, tomate, huevo, jamón, queso y papas noisette', precio:''},
+  {categoria:'kids', item:'Patitas de pollo', descripcion:'Con papas fritas o puré', precio:''},
+  {categoria:'kids', item:'Pizzetas (3)', descripcion:'', precio:''}
+];
+
+const NEGOCIO = {
+  nombre: "Alto Lavalle Restó",
+  direccion: "Sarmiento 353, Famaillá, Tucumán",
+  telefono: "0381 440-3955",
+  facebook: "https://www.facebook.com/AltoLavalleResto",
+  maps: "https://maps.app.goo.gl/xg2jFXLoD7KaNTi38",
+  horarios: [
+    "Lunes: 11:00–15:00 · 20:00–00:30",
+    "Martes: 11:00–15:00 · 20:00–00:30",
+    "Miércoles: 11:00–15:00 · 20:00–00:30",
+    "Jueves: 11:00–15:00 · 20:00–01:00",
+    "Viernes: 11:00–15:00 · 20:00–03:00",
+    "Sábado: 11:00–15:00 · 20:00–03:00",
+    "Domingo: 11:00–15:00 · 20:00–02:00"
+  ].join("\n")
+};
+
+const $ = id => document.getElementById(id);
+onAuthStateChanged(auth, user => {
+  $('sinLogin').style.display = user ? 'none' : 'block';
+  $('conLogin').style.display = user ? 'block' : 'none';
+});
+
+$('btn').addEventListener('click', async () => {
+  const btn = $('btn'), out = $('estado');
+  btn.disabled = true;
+  try {
+    out.textContent = 'Guardando datos del negocio...';
+    await setDoc(doc(db, 'config', 'negocio'), NEGOCIO, { merge: true });
+
+    out.textContent = 'Leyendo el menú actual...';
+    const existentes = {};
+    (await getDocs(collection(db, 'menu'))).forEach(d => {
+      existentes[String((d.data().nombre || '')).trim().toLowerCase()] = d.id;
+    });
+
+    let nuevos = 0, actualizados = 0;
+    for (let i = 0; i < MENU.length; i++) {
+      const it = MENU[i];
+      const clave = it.item.trim().toLowerCase();
+      const precio = String(it.precio || '').replace(/[^\d]/g, '');
+      if (existentes[clave]) {
+        await updateDoc(doc(db, 'menu', existentes[clave]), { orden: i });
+        actualizados++;
+      } else {
+        await addDoc(collection(db, 'menu'), {
+          nombre: it.item,
+          descripcion: it.descripcion || '',
+          categoria: it.categoria,
+          precio: precio ? Number(precio) : null,
+          activo: true,
+          orden: i
+        });
+        nuevos++;
+      }
+      out.textContent = 'Procesando ' + (i + 1) + ' de ' + MENU.length + '...';
+    }
+    out.textContent = 'Listo.\n' + nuevos + ' platos nuevos, ' + actualizados + ' ya existían.\nDatos del negocio cargados.\n\nAbrí el sitio y el panel /admin para revisar.';
+  } catch (e) {
+    console.error(e);
+    out.textContent = 'Error: ' + (e.code || e.message);
+    btn.disabled = false;
+  }
+});
+</script></body></html>
