@@ -151,6 +151,90 @@
     }
 
     /* =========================
+       LISTA DE PLATOS POR CATEGORÍA
+    ========================= */
+
+    #buscarPlato {
+      margin-bottom: 6px;
+    }
+
+    .cat-grupo {
+      border: 1px solid #e3d9cc;
+      border-radius: 10px;
+      margin-top: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .cat-grupo summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 600;
+      color: #651c2c;
+      background: #faf6ef;
+      list-style: none;
+    }
+
+    .cat-grupo summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .cat-grupo summary::after {
+      content: "▾";
+      float: right;
+    }
+
+    .cat-grupo[open] summary::after {
+      content: "▴";
+    }
+
+    .fila-plato {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-top: 1px solid #eee;
+    }
+
+    .fila-oculta {
+      background: #fbf4f4;
+    }
+
+    .fila-info {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    .fila-linea {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      align-items: baseline;
+    }
+
+    .fila-precio {
+      color: #b6842f;
+      font-weight: 600;
+    }
+
+    .fila-desc {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 2px;
+    }
+
+    .fila-plato .botones {
+      margin: 0;
+    }
+
+    .fila-plato button {
+      padding: 7px 11px;
+      margin: 2px;
+    }
+
+    /* =========================
        PANTALLA DE LOGIN
     ========================= */
 
@@ -425,6 +509,12 @@
       <div class="tarjeta">
 
         <h2>Platos del menú</h2>
+
+        <input
+          type="search"
+          id="buscarPlato"
+          placeholder="Buscar plato..."
+        >
 
         <div id="listaPlatos">
           Cargando platos...
@@ -889,220 +979,54 @@
 
 
     // =========================
-    // CARGAR PLATOS
+    // CARGAR PLATOS (agrupados por categoría)
     // =========================
+
+    const CATEGORIAS = [
+      ["pastas", "Pastas"],
+      ["pizzas", "Pizzas"],
+      ["minutas", "Minutas"],
+      ["entradas", "Entradas"],
+      ["ensaladas", "Ensaladas"],
+      ["guarniciones", "Guarniciones"],
+      ["salsas", "Salsas"],
+      ["otros", "Otros platos"],
+      ["kids", "Menú kids"]
+    ];
+
+    const buscarPlato =
+      document.getElementById("buscarPlato");
+
+    let platosCache = [];
+
+    // categorías que están abiertas (para que no se cierren al editar)
+    const categoriasAbiertas = new Set();
+
+    buscarPlato.addEventListener("input", renderPlatos);
+
 
     async function cargarPlatos() {
 
       listaPlatos.textContent =
         "Cargando platos...";
 
-
       try {
 
-        const referencia =
-          collection(db, "menu");
-
         const resultado =
-          await getDocs(referencia);
+          await getDocs(collection(db, "menu"));
 
-
-        listaPlatos.innerHTML = "";
-
-
-        if (resultado.empty) {
-
-          listaPlatos.textContent =
-            "No hay platos cargados.";
-
-          return;
-        }
-
+        platosCache = [];
 
         resultado.forEach((documento) => {
 
-          const datos =
-            documento.data();
-
-          const id =
-            documento.id;
-
-
-          const contenedor =
-            document.createElement("div");
-
-          contenedor.className =
-            "plato";
-
-
-          const titulo =
-            document.createElement("h3");
-
-          titulo.textContent =
-            datos.nombre || "Sin nombre";
-
-
-          const descripcion =
-            document.createElement("p");
-
-          descripcion.textContent =
-            datos.descripcion || "Sin descripción";
-
-
-          const categoria =
-            document.createElement("p");
-
-          categoria.textContent =
-            "Categoría: " +
-            (datos.categoria || "Sin categoría");
-
-
-          const precio =
-            document.createElement("p");
-
-
-          if (
-            datos.precio !== null &&
-            datos.precio !== undefined
-          ) {
-
-            precio.textContent =
-              "Precio: $" +
-              Number(datos.precio).toLocaleString(
-                "es-AR"
-              );
-
-          } else {
-
-            precio.textContent =
-              "Precio: consultar";
-
-          }
-
-
-          const estado =
-            document.createElement("p");
-
-
-          if (datos.activo === true) {
-
-            estado.textContent =
-              "Estado: ACTIVO";
-
-            estado.className =
-              "activo";
-
-          } else {
-
-            estado.textContent =
-              "Estado: OCULTO";
-
-            estado.className =
-              "inactivo";
-
-          }
-
-
-          const botones =
-            document.createElement("div");
-
-          botones.className =
-            "botones";
-
-
-          // EDITAR
-          const editarBtn =
-            document.createElement("button");
-
-          editarBtn.textContent =
-            "Editar";
-
-          editarBtn.className =
-            "btn-editar";
-
-
-          editarBtn.addEventListener(
-            "click",
-            () => {
-
-              cargarPlatoEnFormulario(
-                id,
-                datos
-              );
-
-            }
-          );
-
-
-          // ACTIVAR / DESACTIVAR
-          const estadoBtn =
-            document.createElement("button");
-
-          if (datos.activo === true) {
-
-            estadoBtn.textContent =
-              "Ocultar";
-
-          } else {
-
-            estadoBtn.textContent =
-              "Mostrar";
-
-          }
-
-          estadoBtn.className =
-            "btn-estado";
-
-
-          estadoBtn.addEventListener(
-            "click",
-            async () => {
-
-              await cambiarEstadoPlato(
-                id,
-                datos.activo === true
-              );
-
-            }
-          );
-
-
-          // ELIMINAR
-          const eliminarBtn =
-            document.createElement("button");
-
-          eliminarBtn.textContent =
-            "Eliminar";
-
-          eliminarBtn.className =
-            "btn-eliminar";
-
-
-          eliminarBtn.addEventListener(
-            "click",
-            async () => {
-
-              await eliminarPlato(id);
-
-            }
-          );
-
-
-          botones.appendChild(editarBtn);
-          botones.appendChild(estadoBtn);
-          botones.appendChild(eliminarBtn);
-
-          contenedor.appendChild(titulo);
-          contenedor.appendChild(descripcion);
-          contenedor.appendChild(categoria);
-          contenedor.appendChild(precio);
-          contenedor.appendChild(estado);
-          contenedor.appendChild(botones);
-
-          listaPlatos.appendChild(contenedor);
+          platosCache.push({
+            id: documento.id,
+            datos: documento.data()
+          });
 
         });
 
+        renderPlatos();
 
       } catch (error) {
 
@@ -1115,6 +1039,281 @@
           "Error al cargar los platos.";
 
       }
+
+    }
+
+
+    function ordenDe(plato) {
+
+      return typeof plato.datos.orden === "number"
+        ? plato.datos.orden
+        : 9999;
+
+    }
+
+
+    function renderPlatos() {
+
+      listaPlatos.innerHTML = "";
+
+      if (platosCache.length === 0) {
+
+        listaPlatos.textContent =
+          "No hay platos cargados.";
+
+        return;
+      }
+
+      const filtro =
+        buscarPlato.value.trim().toLowerCase();
+
+      const grupos = {};
+
+      platosCache.forEach((plato) => {
+
+        const nombre =
+          (plato.datos.nombre || "").toLowerCase();
+
+        const descripcion =
+          (plato.datos.descripcion || "").toLowerCase();
+
+        if (
+          filtro &&
+          !nombre.includes(filtro) &&
+          !descripcion.includes(filtro)
+        ) {
+          return;
+        }
+
+        const cat =
+          plato.datos.categoria || "sin-categoria";
+
+        if (!grupos[cat]) {
+          grupos[cat] = [];
+        }
+
+        grupos[cat].push(plato);
+
+      });
+
+      const ordenCategorias =
+        CATEGORIAS.map((c) => c[0]);
+
+      Object.keys(grupos).forEach((c) => {
+        if (!ordenCategorias.includes(c)) {
+          ordenCategorias.push(c);
+        }
+      });
+
+      const nombresCategorias =
+        Object.fromEntries(CATEGORIAS);
+
+      nombresCategorias["sin-categoria"] =
+        "Sin categoría";
+
+      let hayResultados = false;
+
+      ordenCategorias.forEach((cat) => {
+
+        const items = grupos[cat];
+
+        if (!items || items.length === 0) {
+          return;
+        }
+
+        hayResultados = true;
+
+        items.sort((a, b) =>
+          (ordenDe(a) - ordenDe(b)) ||
+          (a.datos.nombre || "").localeCompare(
+            b.datos.nombre || "",
+            "es"
+          )
+        );
+
+        const grupo =
+          document.createElement("details");
+
+        grupo.className = "cat-grupo";
+
+        grupo.open =
+          filtro !== "" || categoriasAbiertas.has(cat);
+
+        grupo.addEventListener("toggle", () => {
+
+          if (filtro !== "") {
+            return;
+          }
+
+          if (grupo.open) {
+            categoriasAbiertas.add(cat);
+          } else {
+            categoriasAbiertas.delete(cat);
+          }
+
+        });
+
+        const ocultos =
+          items.filter((p) => p.datos.activo !== true).length;
+
+        const resumen =
+          document.createElement("summary");
+
+        resumen.textContent =
+          (nombresCategorias[cat] || cat) +
+          " (" + items.length + ")" +
+          (ocultos > 0
+            ? " · " + ocultos +
+              (ocultos === 1 ? " oculto" : " ocultos")
+            : "");
+
+        grupo.appendChild(resumen);
+
+        items.forEach((plato) => {
+          grupo.appendChild(
+            crearFilaPlato(plato.id, plato.datos)
+          );
+        });
+
+        listaPlatos.appendChild(grupo);
+
+      });
+
+      if (!hayResultados) {
+
+        listaPlatos.textContent =
+          "No se encontraron platos.";
+
+      }
+
+    }
+
+
+    function crearFilaPlato(id, datos) {
+
+      const activo = datos.activo === true;
+
+      const fila =
+        document.createElement("div");
+
+      fila.className =
+        "fila-plato" + (activo ? "" : " fila-oculta");
+
+
+      const info =
+        document.createElement("div");
+
+      info.className = "fila-info";
+
+
+      const linea =
+        document.createElement("div");
+
+      linea.className = "fila-linea";
+
+
+      const nombre =
+        document.createElement("strong");
+
+      nombre.textContent =
+        datos.nombre || "Sin nombre";
+
+
+      const precio =
+        document.createElement("span");
+
+      precio.className = "fila-precio";
+
+      precio.textContent =
+        (datos.precio !== null && datos.precio !== undefined)
+          ? "$" + Number(datos.precio).toLocaleString("es-AR")
+          : "Consultar";
+
+
+      const estado =
+        document.createElement("span");
+
+      estado.className =
+        activo ? "activo" : "inactivo";
+
+      estado.textContent =
+        activo ? "Activo" : "Oculto";
+
+
+      linea.appendChild(nombre);
+      linea.appendChild(precio);
+      linea.appendChild(estado);
+
+      info.appendChild(linea);
+
+
+      if (datos.descripcion) {
+
+        const descripcion =
+          document.createElement("div");
+
+        descripcion.className = "fila-desc";
+
+        descripcion.textContent =
+          datos.descripcion;
+
+        info.appendChild(descripcion);
+
+      }
+
+
+      const botones =
+        document.createElement("div");
+
+      botones.className = "botones";
+
+
+      // EDITAR
+      const editarBtn =
+        document.createElement("button");
+
+      editarBtn.textContent = "Editar";
+      editarBtn.className = "btn-editar";
+
+      editarBtn.addEventListener("click", () => {
+        cargarPlatoEnFormulario(id, datos);
+      });
+
+
+      // MOSTRAR / OCULTAR
+      const estadoBtn =
+        document.createElement("button");
+
+      estadoBtn.textContent =
+        activo ? "Ocultar" : "Mostrar";
+
+      estadoBtn.className = "btn-estado";
+
+      estadoBtn.addEventListener("click", async () => {
+        await cambiarEstadoPlato(id, activo);
+      });
+
+
+      // ELIMINAR
+      const eliminarBtn =
+        document.createElement("button");
+
+      eliminarBtn.textContent = "Eliminar";
+      eliminarBtn.className = "btn-eliminar";
+
+      eliminarBtn.addEventListener("click", async () => {
+        await eliminarPlato(id);
+      });
+
+
+      botones.appendChild(editarBtn);
+      botones.appendChild(estadoBtn);
+      botones.appendChild(eliminarBtn);
+
+      fila.appendChild(info);
+      fila.appendChild(botones);
+
+      return fila;
 
     }
 
