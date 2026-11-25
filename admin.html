@@ -11,6 +11,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================
+       ALTO LAVALLE — PANEL EN ESTILO SKEUOMORPHISM
+       Superficies marfil, controles físicos y rojo vino
+    ========================================================= */
+
+    :root {
+      --vino: #6d1526;
+      --vino-claro: #8f2a3f;
+      --vino-oscuro: #4a0e1a;
+      --marfil: #f6f1e8;
+      --marfil-2: #ece4d6;
+      --blanco: #fffdf9;
+      --tinta: #3a2c27;
+      --tinta-suave: #7a6a60;
+      --oro: #b6842f;
+      --borde-claro: rgba(255, 255, 255, 0.95);
+      --borde-oscuro: rgba(86, 62, 40, 0.22);
+
+      --ruido: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .2  0 0 0 .28 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -18,8 +39,12 @@
     body {
       margin: 0;
       font-family: 'Work Sans', Arial, sans-serif;
-      background: #f4f1ed;
-      color: #333;
+      color: var(--tinta);
+      background:
+        radial-gradient(900px 500px at 15% -5%, #fffaf0, transparent 70%),
+        linear-gradient(180deg, #efe8dc, #e4dacb);
+      background-attachment: fixed;
+      min-height: 100vh;
     }
 
     h1, h2, h3 {
@@ -28,151 +53,253 @@
 
     .contenedor {
       width: 100%;
-      max-width: 950px;
+      max-width: 760px;
       margin: auto;
-      padding: 20px;
+      padding: 18px 16px 40px;
     }
 
+    /* ---------- Placa de título (cuero vino) ---------- */
     h1 {
-      color: #651c2c;
-      margin-bottom: 5px;
+      margin: 6px 0 22px;
+      padding: 18px 20px;
+      text-align: center;
+      font-size: clamp(1.25rem, 5vw, 1.7rem);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #fbefe0;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      border: 1px solid var(--vino-oscuro);
+      background:
+        var(--ruido),
+        linear-gradient(180deg, #8a2236 0%, #6d1526 45%, #571020 100%);
+      background-blend-mode: soft-light, normal;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.25),
+        0 2px 0 #3d0b16,
+        0 10px 18px rgba(74, 14, 26, 0.32);
     }
 
     h2 {
-      color: #651c2c;
-      margin-top: 0;
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      color: var(--vino);
+      text-shadow: 0 1px 0 var(--borde-claro);
     }
 
+    /* ---------- Placas marfil (tarjetas) ---------- */
     .tarjeta {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      position: relative;
+      margin-bottom: 22px;
+      padding: 22px 20px;
+      border-radius: 22px;
+      border: 1px solid #fff;
+      background:
+        var(--ruido),
+        linear-gradient(160deg, #ffffff 0%, #f5efe4 55%, #ebe2d3 100%);
+      background-blend-mode: multiply, normal;
+      box-shadow:
+        inset 0 1px 0 #fff,
+        inset 0 -2px 4px rgba(120, 90, 60, 0.12),
+        0 1px 0 rgba(120, 90, 60, 0.25),
+        0 14px 26px rgba(90, 64, 40, 0.22),
+        0 3px 6px rgba(90, 64, 40, 0.16);
     }
 
+    /* ---------- Etiquetas grabadas ---------- */
+    label {
+      display: block;
+      margin: 10px 0 2px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: var(--tinta-suave);
+      text-shadow: 0 1px 0 var(--borde-claro);
+    }
+
+    /* ---------- Campos hundidos ---------- */
     input,
     textarea,
     select {
       width: 100%;
-      padding: 11px;
-      margin-top: 6px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
+      margin: 6px 0 12px;
+      padding: 13px 14px;
+      font: inherit;
       font-size: 15px;
+      color: var(--tinta);
+      border-radius: 14px;
+      border: 1px solid #cfc2ae;
+      border-top-color: #b8a98f;
+      background: linear-gradient(180deg, #e8dfd0 0%, #f4eee3 100%);
+      box-shadow:
+        inset 2px 4px 8px rgba(80, 58, 36, 0.28),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.7),
+        0 1px 0 #fff;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #a99a89;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--vino-claro);
+      box-shadow:
+        inset 2px 4px 8px rgba(80, 58, 36, 0.28),
+        0 0 0 3px rgba(143, 42, 63, 0.22),
+        0 1px 0 #fff;
     }
 
     textarea {
       resize: vertical;
-      min-height: 80px;
+      min-height: 92px;
     }
 
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 8px;
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 40px;
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%236d1526' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg>"),
+        linear-gradient(180deg, #e8dfd0 0%, #f4eee3 100%);
+      background-repeat: no-repeat, no-repeat;
+      background-position: right 14px center, 0 0;
     }
 
+    /* ---------- Botones: teclas con relieve ---------- */
     button {
-      border: none;
-      border-radius: 7px;
-      padding: 10px 15px;
+      font-family: 'Work Sans', Arial, sans-serif;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       margin: 4px;
+      padding: 11px 18px;
+      border-radius: 13px;
+      border: 1px solid transparent;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transform: translateY(3px);
     }
 
     .btn-principal {
-      background: #651c2c;
-      color: white;
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+      border-color: var(--vino-oscuro);
+      background: linear-gradient(180deg, #a02c43 0%, #6d1526 52%, #561020 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.38),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.22),
+        0 4px 0 #3a0a14,
+        0 9px 14px rgba(74, 14, 26, 0.35);
     }
 
-    .btn-secundario {
-      background: #777;
-      color: white;
+    .btn-principal:active {
+      box-shadow:
+        inset 0 2px 5px rgba(0, 0, 0, 0.45),
+        0 1px 0 #3a0a14,
+        0 3px 6px rgba(74, 14, 26, 0.3);
     }
 
+    .btn-secundario,
     .btn-editar {
-      background: #d49b32;
-      color: white;
+      color: var(--vino);
+      text-shadow: 0 1px 0 #fff;
+      border-color: #cdbfaa;
+      background: linear-gradient(180deg, #ffffff 0%, #efe8db 100%);
+      box-shadow:
+        inset 0 1px 0 #fff,
+        inset 0 -2px 3px rgba(120, 90, 60, 0.14),
+        0 3px 0 #b9ab95,
+        0 8px 12px rgba(90, 64, 40, 0.22);
     }
 
-    .btn-estado {
-      background: #555;
-      color: white;
+    .btn-secundario:active,
+    .btn-editar:active {
+      box-shadow:
+        inset 0 2px 5px rgba(90, 64, 40, 0.35),
+        0 1px 0 #b9ab95;
     }
 
     .btn-eliminar {
-      background: #a12626;
-      color: white;
+      color: #ffe9e6;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+      border-color: #2e0710;
+      background: linear-gradient(180deg, #6a1a28 0%, #4a0e1a 55%, #380a14 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+        0 3px 0 #22050c,
+        0 8px 12px rgba(40, 6, 14, 0.35);
     }
 
-    .plato {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 12px;
-      background: #fafafa;
+    .btn-eliminar:active {
+      box-shadow:
+        inset 0 2px 5px rgba(0, 0, 0, 0.55),
+        0 1px 0 #22050c;
     }
 
-    .plato h3 {
-      margin: 0 0 5px 0;
-      color: #651c2c;
-    }
-
-    .plato p {
-      margin: 5px 0;
-    }
-
-    .activo {
-      color: green;
-      font-weight: bold;
-    }
-
-    .inactivo {
-      color: #a12626;
-      font-weight: bold;
-    }
-
-    #mensaje {
-      font-weight: bold;
-      margin-top: 10px;
+    #mensaje,
+    #mensajeNegocio,
+    #mensajePlato {
+      margin: 12px 4px 0;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--vino);
+      text-shadow: 0 1px 0 var(--borde-claro);
     }
 
     .botones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
       margin-top: 10px;
     }
 
-    .separador {
-      border: none;
-      border-top: 1px solid #ddd;
-      margin: 20px 0;
-    }
-
-    /* =========================
+    /* =========================================================
        LISTA DE PLATOS POR CATEGORÍA
-    ========================= */
+    ========================================================= */
 
     #buscarPlato {
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
     .cat-grupo {
-      border: 1px solid #e3d9cc;
-      border-radius: 10px;
-      margin-top: 10px;
-      background: #fff;
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 1px solid #d9ccb8;
+      background: linear-gradient(180deg, #eadfce, #f3ecdf);
+      box-shadow:
+        inset 0 3px 8px rgba(90, 64, 40, 0.22),
+        0 1px 0 #fff;
       overflow: hidden;
     }
 
     .cat-grupo summary {
+      position: relative;
       cursor: pointer;
-      padding: 14px 16px;
-      font-weight: 600;
-      color: #651c2c;
-      background: #faf6ef;
       list-style: none;
+      padding: 15px 52px 15px 18px;
+      font-family: 'Fraunces', serif;
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--vino);
+      text-shadow: 0 1px 0 #fff;
+      border-radius: 17px;
+      background: linear-gradient(180deg, #ffffff 0%, #f0e9dc 100%);
+      box-shadow:
+        inset 0 1px 0 #fff,
+        inset 0 -2px 3px rgba(120, 90, 60, 0.12),
+        0 3px 8px rgba(90, 64, 40, 0.25);
+      -webkit-tap-highlight-color: transparent;
     }
 
     .cat-grupo summary::-webkit-details-marker {
@@ -180,63 +307,173 @@
     }
 
     .cat-grupo summary::after {
-      content: "▾";
-      float: right;
+      content: "";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      width: 26px;
+      height: 26px;
+      margin-top: -13px;
+      border-radius: 50%;
+      background:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / 12px no-repeat,
+        linear-gradient(180deg, #a02c43, #6d1526);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        0 2px 4px rgba(74, 14, 26, 0.4);
+      transition: transform 0.2s ease;
     }
 
     .cat-grupo[open] summary::after {
-      content: "▴";
+      transform: rotate(180deg);
+    }
+
+    .cat-grupo[open] summary {
+      border-radius: 17px 17px 0 0;
+      box-shadow:
+        inset 0 1px 0 #fff,
+        inset 0 -2px 3px rgba(120, 90, 60, 0.12),
+        0 2px 4px rgba(90, 64, 40, 0.25);
     }
 
     .fila-plato {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
-      border-top: 1px solid #eee;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: inset 0 1px 0 rgba(120, 90, 60, 0.14);
     }
 
-    .fila-oculta {
-      background: #fbf4f4;
+    .fila-plato:first-of-type {
+      box-shadow: none;
+    }
+
+    .fila-oculta .fila-info {
+      opacity: 0.55;
     }
 
     .fila-info {
-      flex: 1 1 220px;
+      flex: 1 1 200px;
       min-width: 0;
     }
 
     .fila-linea {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px 12px;
       align-items: baseline;
+      gap: 2px 12px;
+    }
+
+    .fila-linea strong {
+      font-family: 'Fraunces', serif;
+      font-size: 1.02rem;
+      color: var(--tinta);
+      text-shadow: 0 1px 0 #fff;
     }
 
     .fila-precio {
-      color: #b6842f;
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--oro);
+      text-shadow: 0 1px 0 #fff;
     }
 
     .fila-desc {
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 2px;
+      margin-top: 3px;
+      font-size: 0.84rem;
+      color: var(--tinta-suave);
     }
 
     .fila-plato .botones {
       margin: 0;
     }
 
-    .fila-plato button {
-      padding: 7px 11px;
-      margin: 2px;
+    .fila-plato button.btn-editar,
+    .fila-plato button.btn-eliminar {
+      padding: 8px 13px;
+      margin: 3px;
+      font-size: 13px;
+      border-radius: 11px;
     }
 
-    /* =========================
+    /* ---------- Interruptor físico (mostrar / ocultar) ---------- */
+    .interruptor-caja {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 6px;
+    }
+
+    .interruptor {
+      position: relative;
+      width: 62px;
+      height: 32px;
+      margin: 2px;
+      padding: 0;
+      border-radius: 18px;
+      border: 1px solid #bcae98;
+      background: linear-gradient(180deg, #d6ccbb, #ece5d8);
+      box-shadow:
+        inset 0 3px 6px rgba(70, 48, 28, 0.4),
+        0 1px 0 #fff;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .interruptor:active {
+      transform: none;
+    }
+
+    .interruptor .perilla {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffffff 0%, #e4dccd 70%, #cfc4b1 100%);
+      box-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.35),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.12);
+      transition: left 0.2s ease;
+    }
+
+    .interruptor.on {
+      border-color: var(--vino-oscuro);
+      background: linear-gradient(180deg, #4d0c19, #8f2a3f);
+      box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.5),
+        0 1px 0 #fff,
+        0 0 10px rgba(143, 42, 63, 0.35);
+    }
+
+    .interruptor.on .perilla {
+      left: 32px;
+    }
+
+    @media (max-width: 460px) {
+      .interruptor-texto {
+        display: none;
+      }
+
+      .fila-plato button.btn-editar,
+      .fila-plato button.btn-eliminar {
+        padding: 8px 11px;
+      }
+    }
+
+    .interruptor-texto {
+      min-width: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--tinta-suave);
+      text-shadow: 0 1px 0 #fff;
+    }
+
+    /* =========================================================
        PANTALLA DE LOGIN
-    ========================= */
+    ========================================================= */
 
     .pantalla-login {
       min-height: 100vh;
@@ -244,94 +481,130 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 32px;
+      gap: 28px;
       padding: 40px 20px;
       background:
-        radial-gradient(circle at 20% 15%, rgba(214,174,110,0.14), transparent 45%),
-        linear-gradient(160deg, #4a1420, #651c2c 55%, #7a2436);
+        var(--ruido),
+        radial-gradient(circle at 20% 12%, rgba(230, 190, 130, 0.16), transparent 45%),
+        linear-gradient(160deg, #3d0b16, #6d1526 55%, #7f2236);
+      background-blend-mode: soft-light, normal, normal;
     }
 
     .login-marca {
       text-align: center;
-      color: #f4e9d8;
     }
 
-    .login-marca .marca-linea {
-      width: 46px;
-      height: 2px;
-      background: #d49b32;
-      margin: 0 auto 16px;
+    /* Perilla / medallón metálico */
+    .medallon {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--vino);
+      text-shadow: 0 1px 0 #fff, 0 -1px 0 rgba(0, 0, 0, 0.12);
+      background:
+        radial-gradient(circle at 34% 28%, #ffffff 0%, #f1e9db 38%, #d8ccb8 78%, #c4b69f 100%);
+      border: 1px solid #b7a78e;
+      box-shadow:
+        inset 0 2px 3px rgba(255, 255, 255, 0.9),
+        inset 0 -5px 8px rgba(100, 76, 50, 0.28),
+        0 0 0 6px rgba(255, 255, 255, 0.08),
+        0 0 0 7px rgba(0, 0, 0, 0.3),
+        0 14px 24px rgba(0, 0, 0, 0.45);
     }
 
     .login-marca h1 {
-      color: #ffffff;
-      font-size: clamp(1.8rem, 6vw, 2.4rem);
-      font-weight: 600;
-      letter-spacing: 0.3px;
       margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+      font-size: clamp(1.8rem, 7vw, 2.4rem);
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     .login-marca p {
-      margin: 8px 0 0;
-      font-size: 0.9rem;
-      color: #d9b98c;
-      letter-spacing: 0.4px;
+      margin: 6px 0 0;
+      font-size: 0.88rem;
+      letter-spacing: 0.5px;
+      color: #e2c79c;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
     }
 
     .login-card {
+      position: relative;
       width: 100%;
-      max-width: 360px;
-      background: #fffdfa;
-      border-radius: 14px;
-      padding: 32px 28px;
-      box-shadow: 0 18px 40px rgba(20, 6, 10, 0.35);
+      max-width: 370px;
+      padding: 34px 28px 28px;
+      border-radius: 24px;
+      border: 1px solid #fff;
+      background:
+        var(--ruido),
+        linear-gradient(160deg, #ffffff 0%, #f5efe4 55%, #e9dfcf 100%);
+      background-blend-mode: multiply, normal;
+      box-shadow:
+        inset 0 1px 0 #fff,
+        inset 0 -3px 6px rgba(120, 90, 60, 0.15),
+        0 2px 0 rgba(255, 255, 255, 0.25),
+        0 22px 40px rgba(15, 3, 8, 0.55);
     }
 
     .login-card h2 {
-      font-size: 1.2rem;
       text-align: center;
-      margin-bottom: 22px;
-    }
-
-    .login-card label {
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #7a6f68;
-      margin-top: 4px;
-    }
-
-    .login-card input {
-      border: 1px solid #e3d9cc;
-      background: #faf8f4;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .login-card input:focus {
-      outline: none;
-      border-color: #d49b32;
-      box-shadow: 0 0 0 3px rgba(212, 155, 50, 0.18);
-      background: #fff;
+      font-size: 1.25rem;
+      margin-bottom: 18px;
     }
 
     .login-card .btn-principal {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0 0;
+      margin: 14px 0 6px;
+      padding: 14px;
       font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-    }
-
-    .login-card .btn-principal:hover {
-      background: #7a2436;
     }
 
     #mensaje {
       text-align: center;
-      min-height: 1.2em;
-      color: #a12626;
+      min-height: 1.3em;
+      color: #a3182f;
     }
+
+    /* Tornillos en las esquinas */
+    .tornillo {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffffff, #cbbfab 70%, #a99b85);
+      box-shadow:
+        inset 0 -1px 1px rgba(0, 0, 0, 0.25),
+        0 1px 0 rgba(255, 255, 255, 0.9),
+        0 0 0 1px rgba(120, 95, 65, 0.35);
+    }
+
+    .tornillo::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: 50%;
+      height: 1.5px;
+      margin-top: -0.75px;
+      background: rgba(70, 50, 30, 0.55);
+      transform: rotate(35deg);
+    }
+
+    .tornillo.t1 { top: 12px; left: 12px; }
+    .tornillo.t2 { top: 12px; right: 12px; }
+    .tornillo.t3 { bottom: 12px; left: 12px; }
+    .tornillo.t4 { bottom: 12px; right: 12px; }
   </style>
 </head>
 
@@ -341,12 +614,13 @@
   <div id="login" class="pantalla-login">
 
     <div class="login-marca">
-      <div class="marca-linea"></div>
+      <div class="medallon">AL</div>
       <h1>Alto Lavalle</h1>
       <p>Panel de administración</p>
     </div>
 
     <div class="login-card">
+      <i class="tornillo t1"></i><i class="tornillo t2"></i><i class="tornillo t3"></i><i class="tornillo t4"></i>
 
       <h2>Iniciar sesión</h2>
 
@@ -1230,19 +1504,8 @@
           : "Consultar";
 
 
-      const estado =
-        document.createElement("span");
-
-      estado.className =
-        activo ? "activo" : "inactivo";
-
-      estado.textContent =
-        activo ? "Activo" : "Oculto";
-
-
       linea.appendChild(nombre);
       linea.appendChild(precio);
-      linea.appendChild(estado);
 
       info.appendChild(linea);
 
@@ -1280,16 +1543,50 @@
       });
 
 
-      // MOSTRAR / OCULTAR
+      // MOSTRAR / OCULTAR (interruptor)
+      const interruptorCaja =
+        document.createElement("div");
+
+      interruptorCaja.className = "interruptor-caja";
+
       const estadoBtn =
         document.createElement("button");
 
-      estadoBtn.textContent =
-        activo ? "Ocultar" : "Mostrar";
+      estadoBtn.className =
+        "interruptor" + (activo ? " on" : "");
 
-      estadoBtn.className = "btn-estado";
+      estadoBtn.setAttribute("role", "switch");
+
+      estadoBtn.setAttribute(
+        "aria-checked",
+        activo ? "true" : "false"
+      );
+
+      estadoBtn.setAttribute(
+        "aria-label",
+        activo ? "Ocultar plato" : "Mostrar plato"
+      );
+
+      const perilla =
+        document.createElement("span");
+
+      perilla.className = "perilla";
+
+      estadoBtn.appendChild(perilla);
+
+      const etiquetaEstado =
+        document.createElement("span");
+
+      etiquetaEstado.className = "interruptor-texto";
+
+      etiquetaEstado.textContent =
+        activo ? "Visible" : "Oculto";
+
+      interruptorCaja.appendChild(estadoBtn);
+      interruptorCaja.appendChild(etiquetaEstado);
 
       estadoBtn.addEventListener("click", async () => {
+        estadoBtn.classList.toggle("on");
         await cambiarEstadoPlato(id, activo);
       });
 
@@ -1306,8 +1603,8 @@
       });
 
 
+      botones.appendChild(interruptorCaja);
       botones.appendChild(editarBtn);
-      botones.appendChild(estadoBtn);
       botones.appendChild(eliminarBtn);
 
       fila.appendChild(info);
